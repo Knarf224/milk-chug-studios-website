@@ -1,128 +1,136 @@
 # Milk Chug Studios — Website Project Plan
 
 ## Overview
-A clean, minimal game studio website for Milk Chug Studios. The site will showcase games
-built in Godot, allow visitors to play them directly in the browser, and track play counts
-per game. Built with Astro (frontend), Netlify (hosting), and Supabase (database).
+A clean, minimal game studio website for Milk Chug Studios. The site showcases games
+built in Godot, allows visitors to play them directly in the browser, and tracks play counts
+per game. Built with Astro (frontend), Vercel (hosting), and Supabase (database).
 
 ---
 
 ## Phase 1: Project Setup ✓ COMPLETE
-- [x] Initialize Astro project inside this folder (`npm create astro@latest`)
+- [x] Initialize Astro project (`npm create astro@latest`)
 - [x] Choose Astro template: minimal/blank
 - [x] Install dependencies
 - [x] Initialize a Git repository
 - [x] Create a GitHub repository and push initial commit
-- [x] Connect GitHub repo to Netlify for automatic deploys
+- [x] Connect GitHub repo to Vercel for automatic deploys
+- [x] Purchase and connect custom domain `milkchugstudios.com` via Namecheap → Vercel
 
 ---
 
-## Phase 2: Supabase Setup (Play Count Tracking) ✓ COMPLETE
-- [x] Create a free Supabase account at supabase.com
-- [x] Create a new Supabase project (name: milk-chug-studios)
-- [x] Create a `games` table with the following columns:
-  - `id` (int, primary key, auto-increment)
-  - `slug` (text, unique) — URL-friendly game identifier e.g. `power-thief`
-  - `title` (text) — Display name of the game
-  - `play_count` (int, default 0)
-- [x] Enable Row Level Security (RLS) and add a policy allowing public reads and increments
-- [x] Copy Supabase project URL and anon key into a `.env` file
-- [x] Add `.env` to `.gitignore` so secrets are not committed
-- [x] Add environment variables to Netlify dashboard
+## Phase 2: Supabase Setup ✓ COMPLETE
+- [x] Create a free Supabase account
+- [x] Create project `milk-chug-studios`
+- [x] Create `games` table (`id`, `slug`, `title`, `play_count`, `live`)
+- [x] Enable Row Level Security with public read + update policies
+- [x] Add Supabase keys to `.env` file
+- [x] Add `.env` to `.gitignore`
+- [x] Add environment variables to Vercel dashboard
+- [x] Add `live` boolean column to control Coming Soon vs. playable state
+- [x] Reset Power Thief play count to 0
 
 ---
 
 ## Phase 3: Site Structure & Pages ✓ COMPLETE
-> Note: Switched from Netlify to Vercel for hosting. GitHub Desktop used for git pushes.
-> Site live at https://milk-chug-studios-website.vercel.app and milkchugstudios.com (DNS propagating)
-
-### Pages to build:
-- [x] **Home (`/`)** — Hero section with studio name/logo, tagline, featured games grid
-- [x] **Games (`/games`)** — Full list of all games with cover art, description, play count
-- [x] **Game Detail (`/games/[slug]`)** — Individual game page with embedded Godot HTML5 build and play count
-- [x] **About (`/about`)** — Studio mission, who you are, progress/dev log summary
-
-### Shared Components to build:
-- [x] **Header** — Logo, nav links (Home, Games, About)
-- [x] **Footer** — Studio name, copyright, optional social links
-- [x] **GameCard** — Reusable card component (cover image, title, play count badge, Play button)
-- [x] **GameEmbed** — iframe wrapper that loads the Godot HTML5 build and triggers play count increment
+- [x] Home (`/`) — Hero, tagline, game cards from Supabase
+- [x] Games (`/games`) — Full game list
+- [x] Game Detail (`/games/[slug]`) — Coming Soon or live embed based on `live` flag
+- [x] About (`/about`) — Mission, currently building, tech stack cards
+- [x] Privacy Policy (`/privacy`) — Linked in footer
+- [x] Header component with SVG logo
+- [x] Footer component with copyright and Privacy Policy link
+- [x] GameCard component
+- [x] BaseLayout with global styles
 
 ---
 
-## Phase 4: Design & Styling
-- [ ] Set up global CSS variables (colors, fonts, spacing)
-- [ ] Color palette: off-white background, dark charcoal text, single warm accent color
-- [ ] Choose and import a font (e.g. Google Fonts — something clean and slightly bold)
-- [ ] Style the Header and Footer
-- [ ] Style the Home page hero section
-- [ ] Style the GameCard component
-- [ ] Style the Games list page
-- [ ] Style the Game Detail page (game embed + metadata)
-- [ ] Style the About page
-- [ ] Make all pages responsive (mobile-friendly)
+## Phase 4: Design & Styling ✓ COMPLETE
+- [x] Global CSS variables (colors, fonts, spacing)
+- [x] Color palette matched to logo: eggshell bg, navy text, blue accent
+- [x] Space Grotesk font via Google Fonts
+- [x] SVG logo integrated into header
+- [x] All pages styled and responsive
+- [x] About page redesigned with dark hero, mission card, stack grid
+- [x] Coming Soon styled page for unreleased games
 
 ---
 
-## Phase 5: Godot HTML5 Export Setup
-- [ ] In Godot, install the HTML5 export template (Editor > Export > Manage Export Templates)
-- [ ] Configure an HTML5 export preset for each game
-- [ ] Export game to a folder inside the Astro `public/` directory (e.g. `public/games/power-thief/`)
-- [ ] Test the iframe embed locally
-- [ ] Confirm the game loads correctly in Vercel deploy preview
+## Phase 5: Godot HTML5 Export ← NEXT
+- [ ] In Godot: Editor → Export → Manage Export Templates → Download Web template
+- [ ] Add a Web (HTML5) export preset in Godot
+- [ ] Export Power Thief to `public/games/power-thief/` (main file must be `index.html`)
+- [ ] Push via GitHub Desktop → Vercel redeploys
+- [ ] Test game loads correctly on the live site
+- [ ] If game doesn't load, add `vercel.json` with SharedArrayBuffer headers (see webpage.md)
 
 ---
 
-## Phase 6: Play Count Integration
-- [ ] Install Supabase JS client in Astro project (`npm install @supabase/supabase-js`)
-- [ ] Create a Supabase utility/client file
-- [ ] In the GameEmbed component, call a function that increments `play_count` for the game slug when the iframe loads
-- [ ] Display live `play_count` on the GameCard and Game Detail page
-- [ ] Test that counts increment correctly on each page load
+## Phase 6: Play Count Integration ✓ MOSTLY COMPLETE
+- [x] Supabase JS client installed and configured
+- [x] Play count increments when a live game page is loaded
+- [x] Play count is disabled for Coming Soon games
+- [x] Play count displays on GameCard and game detail page
+- [ ] Improve to atomic increment using Supabase RPC function (prevents race conditions)
 
 ---
 
-## Phase 7: Content — First Game (Power Thief)
-- [ ] Add Power Thief entry to the Supabase `games` table
-- [ ] Export Power Thief from Godot as HTML5 and place in `public/games/power-thief/`
-- [ ] Create cover art or placeholder image for Power Thief
-- [ ] Write a short description for the Power Thief game page
-- [ ] Verify the game plays correctly on the live site
+## Phase 7: Content — Power Thief
+- [x] Power Thief row added to Supabase games table
+- [ ] Add `description` column to `games` table in Supabase
+- [ ] Write and add a short description for Power Thief in Supabase
+- [ ] Add `cover` column to `games` table in Supabase
+- [ ] Create cover art for Power Thief (16:9, at least 600x338px, save as WebP)
+- [ ] Place cover at `public/covers/power-thief.webp` and update Supabase
+- [ ] Export game from Godot (see Phase 5)
+- [ ] Set `live: true` in Supabase when ready to launch
 
 ---
 
 ## Phase 8: Launch & Polish
-- [ ] Set up a custom domain (optional — purchase domain if desired)
-- [ ] Add a favicon (milk jug icon or logo)
-- [ ] Add Open Graph meta tags (so links shared on Discord/Twitter show a preview)
-- [ ] Add a simple loading state while the game iframe initializes
-- [ ] Final review: check all pages on desktop and mobile
+- [x] Custom domain connected (`milkchugstudios.com`)
+- [ ] Replace default favicon with Milk Chug Studios icon
+- [ ] Add Open Graph meta tags to BaseLayout (for Discord/Twitter link previews)
+- [ ] Create a 1200x630px social share image
+- [ ] Add loading spinner on game embed while Godot initializes
+- [ ] Final review on desktop and mobile
+- [ ] Test all pages in incognito window at `milkchugstudios.com`
 - [ ] Announce launch
 
 ---
 
-## Future / Backlog
-- [ ] Dev log / blog section to document game development progress
-- [ ] Newsletter signup or mailing list
-- [ ] Leaderboard or high score tracking per game
-- [ ] Admin dashboard to view play count analytics over time
-- [ ] Studio logo / branding (custom art)
-- [ ] Trailer video embed per game page
+## Future / Backlog (Priority Order)
+- [ ] Dev log / blog section — document game development with screenshots and lessons
+- [ ] Social links in footer (Twitter/X, itch.io)
+- [ ] Trailer video embed per game page (YouTube embed above game iframe)
+- [ ] Vercel Analytics or Plausible for page view tracking
+- [ ] Atomic play count fix via Supabase Postgres RPC function
+- [ ] Leaderboard / high score system per game (new `scores` table in Supabase)
+- [ ] Newsletter / mailing list signup (Mailchimp or Buttondown)
+- [ ] Admin dashboard — private page showing play count analytics
+- [ ] Game tags and genre filters on the Games page
+- [ ] Astro SSR mode — so new games appear without a full redeploy
+- [ ] Self-host Space Grotesk font for faster load times
+- [ ] Mobile hamburger menu for small screens
 
 ---
 
 ## Tech Stack Reference
-| Tool       | Purpose                          | Cost  |
-|------------|----------------------------------|-------|
-| Astro      | Static site framework            | Free  |
-| Netlify    | Hosting + CI/CD deploys          | Free  |
-| Supabase   | Play count database              | Free  |
-| GitHub     | Version control + Netlify trigger| Free  |
-| Godot 4.3  | Game engine (HTML5 export)       | Free  |
+| Tool | Purpose | Cost |
+|------|---------|------|
+| Astro | Static site framework | Free |
+| Vercel | Hosting + CI/CD | Free |
+| Supabase | Play count database | Free |
+| GitHub | Version control | Free |
+| GitHub Desktop | Git GUI (push changes) | Free |
+| Namecheap | Domain registrar | ~$12/yr |
+| Godot 4.3 | Game engine (HTML5 export) | Free |
 
 ---
 
-## Notes
-- Keep all game HTML5 exports inside `public/games/<slug>/` so Astro serves them as static files.
-- Never commit `.env` to Git — add Supabase keys to Netlify's environment variable settings.
-- Each new game added in the future just needs: a Supabase row, an HTML5 export folder, a cover image, and a short description. Everything else is handled by the existing templates.
+## Important Notes
+- `.env` must NEVER be committed to GitHub — keys live in Vercel environment variables
+- Each new game needs: a Supabase row, an HTML5 export in `public/games/<slug>/`, a cover image, and a description. Everything else is automatic.
+- Supabase free tier pauses after 1 week of inactivity — log in periodically to keep it active
+- Godot HTML5 exports may need `vercel.json` headers for SharedArrayBuffer — see webpage.md
+- Always push via GitHub Desktop after committing — commits alone do not trigger a Vercel deploy
+- See `webpage.md` for full documentation, file structure, and detailed improvement notes
