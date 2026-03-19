@@ -7,28 +7,28 @@ per game. Built with Astro (frontend), Netlify (hosting), and Supabase (database
 
 ---
 
-## Phase 1: Project Setup
-- [ ] Initialize Astro project inside this folder (`npm create astro@latest`)
-- [ ] Choose Astro template: minimal/blank
-- [ ] Install dependencies
-- [ ] Initialize a Git repository
-- [ ] Create a GitHub repository and push initial commit
-- [ ] Connect GitHub repo to Netlify for automatic deploys
+## Phase 1: Project Setup ✓ COMPLETE
+- [x] Initialize Astro project inside this folder (`npm create astro@latest`)
+- [x] Choose Astro template: minimal/blank
+- [x] Install dependencies
+- [x] Initialize a Git repository
+- [x] Create a GitHub repository and push initial commit
+- [x] Connect GitHub repo to Netlify for automatic deploys
 
 ---
 
-## Phase 2: Supabase Setup (Play Count Tracking)
-- [ ] Create a free Supabase account at supabase.com
-- [ ] Create a new Supabase project (name: milk-chug-studios)
-- [ ] Create a `games` table with the following columns:
+## Phase 2: Supabase Setup (Play Count Tracking) ✓ COMPLETE
+- [x] Create a free Supabase account at supabase.com
+- [x] Create a new Supabase project (name: milk-chug-studios)
+- [x] Create a `games` table with the following columns:
   - `id` (int, primary key, auto-increment)
   - `slug` (text, unique) — URL-friendly game identifier e.g. `power-thief`
   - `title` (text) — Display name of the game
   - `play_count` (int, default 0)
-- [ ] Enable Row Level Security (RLS) and add a policy allowing public reads and increments
-- [ ] Copy Supabase project URL and anon key into a `.env` file
-- [ ] Add `.env` to `.gitignore` so secrets are not committed
-- [ ] Add environment variables to Netlify dashboard
+- [x] Enable Row Level Security (RLS) and add a policy allowing public reads and increments
+- [x] Copy Supabase project URL and anon key into a `.env` file
+- [x] Add `.env` to `.gitignore` so secrets are not committed
+- [x] Add environment variables to Netlify dashboard
 
 ---
 

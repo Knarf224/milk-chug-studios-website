@@ -1,17 +1,97 @@
 ---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import GameCard from '../components/GameCard.astro'
+import { supabase } from '../lib/supabase.js'
 
+const { data: games } = await supabase
+  .from('games')
+  .select('*')
+  .order('id', { ascending: true })
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title="Milk Chug Studios">
+  <section class="hero">
+    <div class="container">
+      <h1>Milk Chug <span>Studios</span></h1>
+      <p>Indie games made with passion. Play them right here in your browser.</p>
+      <a href="/games" class="btn">Browse Games →</a>
+    </div>
+  </section>
+
+  {games && games.length > 0 && (
+    <section class="featured">
+      <div class="container">
+        <h2>Latest Games</h2>
+        <div class="grid">
+          {games.map(game => (
+            <GameCard
+              title={game.title}
+              slug={game.slug}
+              description={game.description}
+              play_count={game.play_count}
+              cover={game.cover}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  .hero {
+    padding: 6rem 0 5rem;
+    text-align: center;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 700;
+    letter-spacing: -2px;
+    line-height: 1.1;
+    margin-bottom: 1.25rem;
+  }
+
+  .hero h1 span {
+    color: var(--accent-dark);
+  }
+
+  .hero p {
+    font-size: 1.15rem;
+    color: var(--muted);
+    max-width: 480px;
+    margin: 0 auto 2rem;
+  }
+
+  .btn {
+    display: inline-block;
+    background: var(--accent);
+    color: var(--text);
+    font-weight: 700;
+    padding: 0.75rem 1.75rem;
+    border-radius: 8px;
+    transition: background 0.15s, transform 0.15s;
+  }
+
+  .btn:hover {
+    background: var(--accent-dark);
+    color: #fff;
+    transform: translateY(-2px);
+  }
+
+  .featured {
+    padding-bottom: 4rem;
+  }
+
+  .featured h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+</style>

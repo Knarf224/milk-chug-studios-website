@@ -1,0 +1,113 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import { supabase } from '../../lib/supabase.js'
+
+export async function getStaticPaths() {
+  const { data: games } = await supabase.from('games').select('*')
+  return (games ?? []).map(game => ({
+    params: { slug: game.slug },
+    props: { game },
+  }))
+}
+
+const { game } = Astro.props
+---
+
+<BaseLayout title={game.title}>
+  <section class="page">
+    <div class="container">
+      <a href="/games" class="back">← All Games</a>
+      <h1>{game.title}</h1>
+      {game.description && <p class="description">{game.description}</p>}
+
+      <div class="embed-wrapper" data-slug={game.slug}>
+        <iframe
+          src={`/games/${game.slug}/index.html`}
+          allowfullscreen
+          title={game.title}
+        ></iframe>
+      </div>
+
+      <p class="play-count" id="play-count">▶ {game.play_count} plays</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  import { supabase } from '../../lib/supabase.js'
+
+  const wrapper = document.querySelector('.embed-wrapper') as HTMLElement
+  const slug = wrapper?.dataset.slug
+
+  if (slug) {
+    // Increment play count when page loads
+    const { data: current } = await supabase
+      .from('games')
+      .select('play_count')
+      .eq('slug', slug)
+      .single()
+
+    if (current) {
+      const newCount = (current.play_count ?? 0) + 1
+      await supabase
+        .from('games')
+        .update({ play_count: newCount })
+        .eq('slug', slug)
+
+      const counter = document.getElementById('play-count')
+      if (counter) counter.textContent = `▶ ${newCount} plays`
+    }
+  }
+</script>
+
+<style>
+  .page {
+    padding: 4rem 0;
+  }
+
+  .back {
+    display: inline-block;
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    transition: color 0.15s;
+  }
+
+  .back:hover {
+    color: var(--text);
+  }
+
+  h1 {
+    font-size: 2.25rem;
+    font-weight: 700;
+    letter-spacing: -1px;
+    margin-bottom: 0.5rem;
+  }
+
+  .description {
+    color: var(--muted);
+    margin-bottom: 2rem;
+    max-width: 600px;
+  }
+
+  .embed-wrapper {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: #000;
+    margin-bottom: 1rem;
+  }
+
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  .play-count {
+    color: var(--muted);
+    font-size: 0.875rem;
+  }
+</style>

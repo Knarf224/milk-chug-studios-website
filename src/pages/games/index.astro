@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import GameCard from '../../components/GameCard.astro'
+import { supabase } from '../../lib/supabase.js'
+
+const { data: games } = await supabase
+  .from('games')
+  .select('*')
+  .order('id', { ascending: true })
+---
+
+<BaseLayout title="Games">
+  <section class="page">
+    <div class="container">
+      <h1>Games</h1>
+      <p class="subtitle">All games playable right here in your browser.</p>
+
+      {games && games.length > 0 ? (
+        <div class="grid">
+          {games.map(game => (
+            <GameCard
+              title={game.title}
+              slug={game.slug}
+              description={game.description}
+              play_count={game.play_count}
+              cover={game.cover}
+            />
+          ))}
+        </div>
+      ) : (
+        <p class="empty">No games yet — check back soon!</p>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page {
+    padding: 4rem 0;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -1px;
+    margin-bottom: 0.5rem;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    margin-bottom: 3rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .empty {
+    color: var(--muted);
+    font-size: 1.1rem;
+  }
+</style>

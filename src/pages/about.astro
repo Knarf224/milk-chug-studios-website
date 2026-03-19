@@ -1,0 +1,95 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+---
+
+<BaseLayout title="About">
+  <section class="page">
+    <div class="container">
+      <h1>About Milk Chug Studios</h1>
+
+      <div class="content">
+        <p>
+          Milk Chug Studios is an indie game studio focused on creating fun, creative games
+          and sharing the journey of building them. Every game here is made by one person
+          learning, experimenting, and improving with each project.
+        </p>
+
+        <h2>The Mission</h2>
+        <p>
+          To build games that are worth playing, document the process openly, and grow
+          as a developer one release at a time. No deadlines, no crunch — just a love
+          for making things.
+        </p>
+
+        <h2>The Stack</h2>
+        <ul>
+          <li>Games built with <strong>Godot 4</strong></li>
+          <li>Website built with <strong>Astro</strong> and hosted on <strong>Netlify</strong></li>
+          <li>Play counts tracked with <strong>Supabase</strong></li>
+        </ul>
+
+        <h2>Follow the Journey</h2>
+        <p>
+          All games are playable for free directly in your browser. Check back regularly
+          — new games and updates are always in progress.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page {
+    padding: 4rem 0;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -1px;
+    margin-bottom: 3rem;
+  }
+
+  .content {
+    max-width: 640px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .content h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-top: 1rem;
+  }
+
+  .content p {
+    color: var(--muted);
+    line-height: 1.75;
+  }
+
+  .content ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .content ul li {
+    color: var(--muted);
+    padding-left: 1rem;
+    position: relative;
+  }
+
+  .content ul li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent-dark);
+  }
+
+  .content strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+</style>
