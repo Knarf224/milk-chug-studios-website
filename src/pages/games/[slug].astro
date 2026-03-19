@@ -11,6 +11,7 @@ export async function getStaticPaths() {
 }
 
 const { game } = Astro.props
+const comingSoon = !game.live
 ---
 
 <BaseLayout title={game.title}>
@@ -20,45 +21,55 @@ const { game } = Astro.props
       <h1>{game.title}</h1>
       {game.description && <p class="description">{game.description}</p>}
 
-      <div class="embed-wrapper" data-slug={game.slug}>
-        <iframe
-          src={`/games/${game.slug}/index.html`}
-          allowfullscreen
-          title={game.title}
-        ></iframe>
-      </div>
-
-      <p class="play-count" id="play-count">▶ {game.play_count} plays</p>
+      {comingSoon ? (
+        <div class="coming-soon">
+          <span class="cs-icon">⚡</span>
+          <h2>Coming Soon</h2>
+          <p>This game is currently in development. Check back soon!</p>
+        </div>
+      ) : (
+        <>
+          <div class="embed-wrapper" data-slug={game.slug}>
+            <iframe
+              src={`/games/${game.slug}/index.html`}
+              allowfullscreen
+              title={game.title}
+            ></iframe>
+          </div>
+          <p class="play-count" id="play-count">▶ {game.play_count} plays</p>
+        </>
+      )}
     </div>
   </section>
 </BaseLayout>
 
-<script>
-  import { supabase } from '../../lib/supabase.js'
+{!comingSoon && (
+  <script>
+    import { supabase } from '../../lib/supabase.js'
 
-  const wrapper = document.querySelector('.embed-wrapper') as HTMLElement
-  const slug = wrapper?.dataset.slug
+    const wrapper = document.querySelector('.embed-wrapper') as HTMLElement
+    const slug = wrapper?.dataset.slug
 
-  if (slug) {
-    // Increment play count when page loads
-    const { data: current } = await supabase
-      .from('games')
-      .select('play_count')
-      .eq('slug', slug)
-      .single()
-
-    if (current) {
-      const newCount = (current.play_count ?? 0) + 1
-      await supabase
+    if (slug) {
+      const { data: current } = await supabase
         .from('games')
-        .update({ play_count: newCount })
+        .select('play_count')
         .eq('slug', slug)
+        .single()
 
-      const counter = document.getElementById('play-count')
-      if (counter) counter.textContent = `▶ ${newCount} plays`
+      if (current) {
+        const newCount = (current.play_count ?? 0) + 1
+        await supabase
+          .from('games')
+          .update({ play_count: newCount })
+          .eq('slug', slug)
+
+        const counter = document.getElementById('play-count')
+        if (counter) counter.textContent = `▶ ${newCount} plays`
+      }
     }
-  }
-</script>
+  </script>
+)}
 
 <style>
   .page {
@@ -88,6 +99,36 @@ const { game } = Astro.props
     color: var(--muted);
     margin-bottom: 2rem;
     max-width: 600px;
+  }
+
+  .coming-soon {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 12px;
+    border: 2px dashed var(--border);
+    background: var(--card-bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .cs-icon {
+    font-size: 3rem;
+  }
+
+  .coming-soon h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -1px;
+    color: var(--text);
+  }
+
+  .coming-soon p {
+    color: var(--muted);
+    font-size: 1rem;
   }
 
   .embed-wrapper {
