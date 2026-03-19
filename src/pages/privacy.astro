@@ -1,0 +1,133 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+const year = new Date().getFullYear()
+---
+
+<BaseLayout title="Privacy Policy">
+  <section class="page">
+    <div class="container">
+      <h1>Privacy Policy</h1>
+      <p class="updated">Last updated: March 2026</p>
+
+      <div class="content">
+        <p>
+          Milk Chug Studios ("we", "us", or "our") operates milkchugstudios.com.
+          This page explains what information we collect, how we use it, and your rights
+          regarding that information.
+        </p>
+
+        <h2>What We Collect</h2>
+        <p>
+          We do not collect any personal information such as your name, email address,
+          or location. The only data we record is an anonymous play count each time a
+          game is loaded on our site. This count is a simple number — it is not tied
+          to any individual user or device.
+        </p>
+
+        <h2>Cookies</h2>
+        <p>
+          We do not use cookies or any tracking technology to identify or follow
+          individual visitors across sessions or websites.
+        </p>
+
+        <h2>Third-Party Services</h2>
+        <p>We use the following third-party services to operate this site:</p>
+        <ul>
+          <li>
+            <strong>Supabase</strong> — used to store anonymous game play counts.
+            Supabase may collect basic server logs as part of standard database
+            operations. See their privacy policy at supabase.com/privacy.
+          </li>
+          <li>
+            <strong>Vercel</strong> — used to host and serve this website. Vercel
+            may collect standard server access logs (IP address, browser type, pages
+            visited) for infrastructure and security purposes. See their privacy
+            policy at vercel.com/legal/privacy-policy.
+          </li>
+        </ul>
+
+        <h2>Children's Privacy</h2>
+        <p>
+          Our site is open to all ages. We do not knowingly collect any personal
+          information from anyone, including children under 13.
+        </p>
+
+        <h2>Changes to This Policy</h2>
+        <p>
+          We may update this privacy policy as the site grows and new features are
+          added. Any changes will be reflected on this page with an updated date.
+        </p>
+
+        <h2>Contact</h2>
+        <p>
+          If you have any questions about this privacy policy, you can reach us at
+          <strong>milkchugstudios.com</strong>.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page {
+    padding: 4rem 0;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -1px;
+    margin-bottom: 0.4rem;
+  }
+
+  .updated {
+    color: var(--muted);
+    font-size: 0.875rem;
+    margin-bottom: 3rem;
+  }
+
+  .content {
+    max-width: 640px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .content h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-top: 1rem;
+  }
+
+  .content p {
+    color: var(--muted);
+    line-height: 1.75;
+  }
+
+  .content ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding-left: 1rem;
+  }
+
+  .content ul li {
+    color: var(--muted);
+    line-height: 1.75;
+    position: relative;
+    padding-left: 1rem;
+  }
+
+  .content ul li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent-dark);
+  }
+
+  .content strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+</style>

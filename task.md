@@ -32,19 +32,21 @@ per game. Built with Astro (frontend), Netlify (hosting), and Supabase (database
 
 ---
 
-## Phase 3: Site Structure & Pages
+## Phase 3: Site Structure & Pages ✓ COMPLETE
+> Note: Switched from Netlify to Vercel for hosting. GitHub Desktop used for git pushes.
+> Site live at https://milk-chug-studios-website.vercel.app and milkchugstudios.com (DNS propagating)
 
 ### Pages to build:
-- [ ] **Home (`/`)** — Hero section with studio name/logo, tagline, featured games grid
-- [ ] **Games (`/games`)** — Full list of all games with cover art, description, play count
-- [ ] **Game Detail (`/games/[slug]`)** — Individual game page with embedded Godot HTML5 build and play count
-- [ ] **About (`/about`)** — Studio mission, who you are, progress/dev log summary
+- [x] **Home (`/`)** — Hero section with studio name/logo, tagline, featured games grid
+- [x] **Games (`/games`)** — Full list of all games with cover art, description, play count
+- [x] **Game Detail (`/games/[slug]`)** — Individual game page with embedded Godot HTML5 build and play count
+- [x] **About (`/about`)** — Studio mission, who you are, progress/dev log summary
 
 ### Shared Components to build:
-- [ ] **Header** — Logo, nav links (Home, Games, About)
-- [ ] **Footer** — Studio name, copyright, optional social links
-- [ ] **GameCard** — Reusable card component (cover image, title, play count badge, Play button)
-- [ ] **GameEmbed** — iframe wrapper that loads the Godot HTML5 build and triggers play count increment
+- [x] **Header** — Logo, nav links (Home, Games, About)
+- [x] **Footer** — Studio name, copyright, optional social links
+- [x] **GameCard** — Reusable card component (cover image, title, play count badge, Play button)
+- [x] **GameEmbed** — iframe wrapper that loads the Godot HTML5 build and triggers play count increment
 
 ---
 
@@ -67,7 +69,7 @@ per game. Built with Astro (frontend), Netlify (hosting), and Supabase (database
 - [ ] Configure an HTML5 export preset for each game
 - [ ] Export game to a folder inside the Astro `public/` directory (e.g. `public/games/power-thief/`)
 - [ ] Test the iframe embed locally
-- [ ] Confirm the game loads correctly in Netlify deploy preview
+- [ ] Confirm the game loads correctly in Vercel deploy preview
 
 ---
 
