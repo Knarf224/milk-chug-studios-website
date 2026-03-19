@@ -9,7 +9,7 @@ const nav = [
 <header>
   <div class="container">
     <a href="/" class="logo">
-      Milk Chug <span>Studios</span>
+      <img src="/logo.svg" alt="Milk Chug Studios" />
     </a>
     <nav>
       {nav.map(link => (
@@ -22,7 +22,7 @@ const nav = [
 <style>
   header {
     border-bottom: 1px solid var(--border);
-    padding: 1.25rem 0;
+    padding: 0.75rem 0;
     background: var(--bg);
     position: sticky;
     top: 0;
@@ -35,14 +35,10 @@ const nav = [
     justify-content: space-between;
   }
 
-  .logo {
-    font-size: 1.2rem;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-  }
-
-  .logo span {
-    color: var(--accent-dark);
+  .logo img {
+    height: 56px;
+    width: auto;
+    display: block;
   }
 
   nav {
@@ -66,8 +62,8 @@ const nav = [
       gap: 1.25rem;
     }
 
-    .logo {
-      font-size: 1rem;
+    .logo img {
+      height: 40px;
     }
   }
 </style>

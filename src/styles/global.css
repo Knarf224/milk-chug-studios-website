@@ -6,12 +6,12 @@
 
 :root {
   --bg: #F8F6F0;
-  --text: #1C1C1C;
-  --accent: #F5C842;
-  --accent-dark: #D4A800;
+  --text: #1A3A6A;
+  --accent: #4488CC;
+  --accent-dark: #1A3A6A;
   --card-bg: #FFFFFF;
-  --border: #E5E2D9;
-  --muted: #6B6B6B;
+  --border: #DDD9CF;
+  --muted: #6B7A8D;
   --font: 'Space Grotesk', sans-serif;
 }
 
