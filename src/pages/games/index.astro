@@ -6,7 +6,7 @@ import { supabase } from '../../lib/supabase.js'
 const { data: games } = await supabase
   .from('games')
   .select('*')
-  .order('id', { ascending: true })
+  .order('slug', { ascending: true })
 ---
 
 <BaseLayout title="Games">
