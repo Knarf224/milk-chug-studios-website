@@ -26,7 +26,6 @@ const comingSoon = !game.live
           <div class="embed-wrapper" data-slug={game.slug}>
             <iframe
               src={`/play/${game.slug}/index.html`}
-              allowfullscreen
               title={game.title}
             ></iframe>
           </div>
@@ -166,8 +165,7 @@ const comingSoon = !game.live
 
   .embed-wrapper {
     width: 100%;
-    aspect-ratio: 8 / 3;
-    min-height: 720px;
+    aspect-ratio: 16 / 9;
     border-radius: 12px;
     overflow: hidden;
     border: 1px solid var(--border);
