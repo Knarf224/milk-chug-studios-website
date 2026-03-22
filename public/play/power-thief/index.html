@@ -81,6 +81,13 @@ body {
 
 	</head>
 	<body>
+		<script>
+			if ('serviceWorker' in navigator) {
+				navigator.serviceWorker.getRegistrations().then(function(registrations) {
+					for (var r of registrations) { r.unregister(); }
+				});
+			}
+		</script>
 		<canvas id="canvas">
 			Your browser does not support the canvas tag.
 		</canvas>
