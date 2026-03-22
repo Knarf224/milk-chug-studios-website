@@ -83,22 +83,16 @@ const comingSoon = !game.live
     const slug = wrapper?.dataset.slug
 
     if (slug) {
-      const { data: current } = await supabase
+      await supabase.rpc('increment_game_play_count', { game_slug: slug })
+
+      const { data: updated } = await supabase
         .from('games')
         .select('play_count')
         .eq('slug', slug)
         .single()
 
-      if (current) {
-        const newCount = (current.play_count ?? 0) + 1
-        await supabase
-          .from('games')
-          .update({ play_count: newCount })
-          .eq('slug', slug)
-
-        const counter = document.getElementById('play-count')
-        if (counter) counter.textContent = `▶ ${newCount} plays`
-      }
+      const counter = document.getElementById('play-count')
+      if (counter && updated) counter.textContent = `▶ ${updated.play_count} plays`
     }
   </script>
 )}
