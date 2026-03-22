@@ -2,15 +2,9 @@
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import { supabase } from '../../lib/supabase.js'
 
-export async function getStaticPaths() {
-  const { data: games } = await supabase.from('games').select('*')
-  return (games ?? []).map(game => ({
-    params: { slug: game.slug },
-    props: { game },
-  }))
-}
-
-const { game } = Astro.props
+const { slug } = Astro.params
+const { data: game } = await supabase.from('games').select('*').eq('slug', slug).single()
+if (!game) return Astro.redirect('/games')
 const comingSoon = !game.live
 ---
 
