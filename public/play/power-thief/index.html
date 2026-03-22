@@ -81,13 +81,6 @@ body {
 
 	</head>
 	<body>
-		<script>
-			if ('serviceWorker' in navigator) {
-				navigator.serviceWorker.getRegistrations().then(function(registrations) {
-					for (var r of registrations) { r.unregister(); }
-				});
-			}
-		</script>
 		<canvas id="canvas">
 			Your browser does not support the canvas tag.
 		</canvas>
@@ -104,7 +97,7 @@ body {
 
 		<script src="index.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"ensureCrossOriginIsolationHeaders":false,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":50588352,"index.wasm":43016933},"focusCanvas":true,"gdextensionLibs":[]};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"ensureCrossOriginIsolationHeaders":false,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":50588336,"index.wasm":43016933},"focusCanvas":true,"gdextensionLibs":[]};
 const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 
