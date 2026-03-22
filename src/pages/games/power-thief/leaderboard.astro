@@ -1,0 +1,274 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro'
+---
+
+<BaseLayout title="Power Thief — Leaderboard">
+  <section class="page">
+    <div class="container">
+      <a href="/games/power-thief" class="back">← Power Thief</a>
+
+      <div class="board-shell">
+
+        <div class="board-header">
+          <h1>⚔ Power Thief — Leaderboard</h1>
+          <p class="board-sub">Global Top 20 · Ranked by Highest Room Reached</p>
+        </div>
+
+        <div id="board-wrap">
+          <div class="board-loading">Loading scores…</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  import { supabase } from '../../../lib/supabase.js'
+
+  const CORE_COLORS = {
+    Fire:      '#C83000',
+    Dash:      '#7820A8',
+    Clone:     '#207820',
+    Phase:     '#1878B0',
+    Explosion: '#B06000',
+    Ice:       '#1880B8',
+    Lightning: '#907000',
+    Shield:    '#706050',
+    Summon:    '#581890',
+    Poison:    '#207818',
+  }
+
+  function coreBadges(cores) {
+    if (!Array.isArray(cores)) return '<span class="no-cores">—</span>'
+    const filtered = cores.filter(c => c && c !== 'None')
+    if (filtered.length === 0) return '<span class="no-cores">—</span>'
+    return filtered.map(c => {
+      const col = CORE_COLORS[c] ?? '#555070'
+      return `<span class="core-badge" style="--c:${col}"><span class="core-star">★</span>${c}</span>`
+    }).join('')
+  }
+
+  function rankCell(rank) {
+    if (rank === 1) return `<span class="rank-badge gold">1st</span>`
+    if (rank === 2) return `<span class="rank-badge silver">2nd</span>`
+    if (rank === 3) return `<span class="rank-badge bronze">3rd</span>`
+    return `<span class="rank-plain">${rank}</span>`
+  }
+
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+  }
+
+  const wrap = document.getElementById('board-wrap')
+
+  const { data, error } = await supabase
+    .from('high_scores')
+    .select('display_name, highest_room, cores, achieved_at')
+    .order('highest_room', { ascending: false })
+    .order('achieved_at',  { ascending: true })
+    .limit(20)
+
+  if (error) {
+    wrap.innerHTML = `<div class="board-loading">Error: ${error.message}</div>`
+  } else if (!data || data.length === 0) {
+    wrap.innerHTML = `<div class="board-loading">No scores yet — be the first on the board!</div>`
+  } else {
+  const rows = data.map((row, i) => {
+    const rank = i + 1
+    const cls = rank === 1 ? 'row-gold' : rank === 2 ? 'row-silver' : rank === 3 ? 'row-bronze' : i % 2 === 0 ? 'row-even' : ''
+    const nameCls = rank === 1 ? 'name-gold' : rank === 2 ? 'name-silver' : rank === 3 ? 'name-bronze' : ''
+    return `<tr class="${cls}">
+      <td class="td-rank">${rankCell(rank)}</td>
+      <td class="td-name ${nameCls}">${escHtml(row.display_name ?? '???')}</td>
+      <td class="td-room"><span class="room-num">${row.highest_room ?? 0}</span></td>
+      <td class="td-cores">${coreBadges(row.cores)}</td>
+    </tr>`
+  }).join('')
+
+  wrap.innerHTML = `
+    <table class="lb-table">
+      <thead>
+        <tr>
+          <th class="th-rank">Rank</th>
+          <th class="th-name">Player</th>
+          <th class="th-room">Room</th>
+          <th class="th-cores">Cores Equipped</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>`
+  }
+</script>
+
+<style is:global>
+  .page {
+    padding: 3rem 0 6rem;
+  }
+
+  .back {
+    display: inline-block;
+    color: var(--muted);
+    font-size: 0.875rem;
+    margin-bottom: 1.75rem;
+    transition: color 0.15s;
+  }
+  .back:hover { color: var(--text); }
+
+  .board-shell {
+    max-width: 860px;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 2px solid var(--border);
+    background: var(--card-bg);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  }
+
+  .board-header {
+    background: var(--text);
+    padding: 1.5rem 2rem;
+    text-align: center;
+  }
+
+  .board-header h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #FFD84A;
+    letter-spacing: 0.02em;
+    margin: 0 0 0.25rem;
+  }
+
+  .board-sub {
+    font-size: 0.78rem;
+    color: #8899BB;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  /* ── Table ── */
+  .lb-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+  .lb-table thead tr {
+    background: #EEEAE0;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .lb-table th {
+    padding: 1rem 1.5rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: left;
+  }
+
+  .th-rank { width: 80px;  text-align: center; }
+  .th-room { width: 90px;  text-align: center; }
+
+  /* ── Body rows ── */
+  .lb-table tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.1s;
+  }
+
+  .lb-table tbody tr:last-child  { border-bottom: none; }
+  .lb-table tbody tr:hover       { background: #F0EDE4 !important; }
+
+  .lb-table tbody tr.row-even    { background: #FAFAF7; }
+  .lb-table tbody tr.row-gold    { background: #FFFBEC; }
+  .lb-table tbody tr.row-silver  { background: #F8F8FA; }
+  .lb-table tbody tr.row-bronze  { background: #FDF7F2; }
+
+  .lb-table td {
+    padding: 2.5rem 1.5rem;
+    vertical-align: middle;
+  }
+
+  .lb-table tbody tr {
+    height: 80px;
+  }
+
+  /* ── Rank column ── */
+  .td-rank { text-align: center; }
+
+  .rank-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  .rank-badge.gold   { background: #FFF0B0; color: #7A5800; border: 1px solid #D8B830; }
+  .rank-badge.silver { background: #EEEEF4; color: #484860; border: 1px solid #B8B8C8; }
+  .rank-badge.bronze { background: #FFF0E8; color: #6A3818; border: 1px solid #C88850; }
+
+  .rank-plain {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--muted);
+  }
+
+  /* ── Name column ── */
+  .td-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .name-gold   { color: #7A5800; }
+  .name-silver { color: #404060; }
+  .name-bronze { color: #6A3818; }
+
+  /* ── Room column ── */
+  .td-room { text-align: center; }
+
+  .room-num {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ── Cores column ── */
+  .td-cores { }
+
+  .core-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px 2px 6px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    margin: 2px 3px 2px 0;
+    background: color-mix(in srgb, var(--c) 10%, #fff);
+    border: 1px solid color-mix(in srgb, var(--c) 40%, transparent);
+    color: var(--c);
+  }
+
+  .core-star { font-size: 0.75rem; line-height: 1; }
+  .no-cores  { color: #CCCCCC; }
+
+  .board-loading {
+    padding: 3rem;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 600px) {
+    .td-cores, .th-cores { display: none; }
+    .th-rank  { width: 60px; }
+    .th-room  { width: 70px; }
+  }
+</style>

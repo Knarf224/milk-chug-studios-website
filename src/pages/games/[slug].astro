@@ -36,7 +36,12 @@ const comingSoon = !game.live
               title={game.title}
             ></iframe>
           </div>
-          <p class="play-count" id="play-count">▶ {game.play_count} plays</p>
+          <div class="game-footer">
+            <p class="play-count" id="play-count">▶ {game.play_count} plays</p>
+            {game.slug === 'power-thief' && (
+              <a href={`/games/${game.slug}/leaderboard`} class="leaderboard-link">⚔ View Leaderboard</a>
+            )}
+          </div>
         </>
       )}
     </div>
@@ -47,6 +52,40 @@ const comingSoon = !game.live
   <script>
     import { supabase } from '../../lib/supabase.js'
 
+    const SUPABASE_ORIGIN = 'https://sbwmznwbfjcnnmgqvifv.supabase.co'
+
+    // ── Approach A: postMessage relay (game sends gdnet_req, parent fetches) ────
+    window.addEventListener('message', async (e: MessageEvent) => {
+      if (!e.data || e.data.type !== 'gdnet_req') return
+      const { id, method, path, headers, body } = e.data
+      try {
+        const opts: RequestInit = { method, headers }
+        if (body) opts.body = atob(body)
+        const res = await fetch(SUPABASE_ORIGIN + path, opts)
+        const text = await res.text()
+        ;(e.source as Window).postMessage({ type: 'gdnet_res', id, status: res.status, body: text }, '*')
+      } catch (_err) {
+        ;(e.source as Window).postMessage({ type: 'gdnet_res', id, status: 0, body: '' }, '*')
+      }
+    })
+
+    // ── Approach B: fetch override in iframe (fallback for older exports) ───────
+    const gameIframe = document.querySelector('iframe') as HTMLIFrameElement | null
+    if (gameIframe) {
+      gameIframe.addEventListener('load', () => {
+        const iwin = gameIframe.contentWindow as any
+        if (!iwin || !iwin.fetch) return
+        const nativeFetch = iwin.fetch.bind(iwin)
+        iwin.fetch = (url: any, opts: any) => {
+          if (typeof url === 'string' && url.startsWith(SUPABASE_ORIGIN)) {
+            return fetch(url, opts)
+          }
+          return nativeFetch(url, opts)
+        }
+      })
+    }
+
+    // ── Play count ─────────────────────────────────────────────────────────────
     const wrapper = document.querySelector('.embed-wrapper') as HTMLElement
     const slug = wrapper?.dataset.slug
 
@@ -133,7 +172,8 @@ const comingSoon = !game.live
 
   .embed-wrapper {
     width: 100%;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 8 / 3;
+    min-height: 720px;
     border-radius: 12px;
     overflow: hidden;
     border: 1px solid var(--border);
@@ -147,8 +187,26 @@ const comingSoon = !game.live
     border: none;
   }
 
+  .game-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+  }
+
   .play-count {
     color: var(--muted);
     font-size: 0.875rem;
+  }
+
+  .leaderboard-link {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--accent);
+    transition: color 0.15s;
+  }
+
+  .leaderboard-link:hover {
+    color: var(--accent-dark);
   }
 </style>
