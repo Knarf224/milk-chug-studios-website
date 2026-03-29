@@ -1,14 +1,28 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
-  <!-- Navy background -->
-  <rect width="32" height="32" rx="4" fill="#1A3A6A"/>
-  <!-- Milk glass body (trapezoid) -->
-  <path d="M10 8 L11.5 24 L20.5 24 L22 8 Z" fill="white" opacity="0.95"/>
-  <!-- Milk fill inside glass -->
-  <path d="M11.8 13 L12.8 24 L19.2 24 L20.2 13 Z" fill="#4488CC" opacity="0.6"/>
-  <!-- Glass rim -->
-  <rect x="10" y="7" width="12" height="2.5" rx="1" fill="white"/>
-  <!-- Glass base -->
-  <rect x="11" y="23" width="10" height="2" rx="1" fill="white"/>
-  <!-- Shine highlight -->
-  <path d="M12.5 11 L12 21" stroke="white" stroke-width="1" stroke-linecap="round" opacity="0.4"/>
+<svg viewBox="0 0 64 64" width="64" height="64" xmlns="http://www.w3.org/2000/svg">
+  <!-- Eggshell background -->
+  <rect width="64" height="64" fill="#F8F6F0"/>
+  <!-- Outer border — navy, matches logo -->
+  <rect x="2.5" y="2.5" width="59" height="59" rx="7" fill="none" stroke="#1A3A6A" stroke-width="2.5"/>
+  <!-- Inner border — blue accent, matches logo -->
+  <rect x="5.5" y="5.5" width="53" height="53" rx="4.5" fill="none" stroke="#4488CC" stroke-width="1" opacity="0.35"/>
+
+  <!-- MILK -->
+  <text x="32" y="24" text-anchor="middle"
+        font-family="'Arial Black', Impact, 'Arial Bold', sans-serif"
+        font-size="15" font-weight="900" fill="#1A3A6A" letter-spacing="1.5">MILK</text>
+
+  <!-- Divider dots — mirrors logo decoration -->
+  <circle cx="26" cy="30.5" r="1.5" fill="#4488CC"/>
+  <circle cx="32" cy="30.5" r="1.5" fill="#4488CC"/>
+  <circle cx="38" cy="30.5" r="1.5" fill="#4488CC"/>
+
+  <!-- CHUG -->
+  <text x="32" y="45" text-anchor="middle"
+        font-family="'Arial Black', Impact, 'Arial Bold', sans-serif"
+        font-size="15" font-weight="900" fill="#1A3A6A" letter-spacing="1.5">CHUG</text>
+
+  <!-- STUDIOS -->
+  <text x="32" y="56" text-anchor="middle"
+        font-family="'Arial Black', Impact, 'Arial Bold', sans-serif"
+        font-size="5.5" font-weight="700" fill="#4488CC" letter-spacing="2.5">STUDIOS</text>
 </svg>
