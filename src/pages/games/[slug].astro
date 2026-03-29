@@ -46,19 +46,22 @@ const comingSoon = !game.live
     import { supabase } from '../../lib/supabase.js'
 
     const SUPABASE_ORIGIN = 'https://sbwmznwbfjcnnmgqvifv.supabase.co'
+    const GAME_ORIGIN = 'https://www.milkchugstudios.com'
 
     // ── Approach A: postMessage relay (game sends gdnet_req, parent fetches) ────
     window.addEventListener('message', async (e: MessageEvent) => {
       if (!e.data || e.data.type !== 'gdnet_req') return
+      // Only accept messages from our own origin — reject cross-origin embedding attacks
+      if (e.origin !== GAME_ORIGIN) return
       const { id, method, path, headers, body } = e.data
       try {
         const opts: RequestInit = { method, headers }
         if (body) opts.body = atob(body)
         const res = await fetch(SUPABASE_ORIGIN + path, opts)
         const text = await res.text()
-        ;(e.source as Window).postMessage({ type: 'gdnet_res', id, status: res.status, body: text }, '*')
+        ;(e.source as Window).postMessage({ type: 'gdnet_res', id, status: res.status, body: text }, GAME_ORIGIN)
       } catch (_err) {
-        ;(e.source as Window).postMessage({ type: 'gdnet_res', id, status: 0, body: '' }, '*')
+        ;(e.source as Window).postMessage({ type: 'gdnet_res', id, status: 0, body: '' }, GAME_ORIGIN)
       }
     })
 
